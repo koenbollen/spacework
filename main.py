@@ -25,9 +25,11 @@ def process( rfid ):
 
 def refresh():
     print chr(27) + "[2J"
-    result = sorted( store.values(), key=lambda i: i['score'] )
+    result = sorted( store.values(), key=lambda i: i['score'], reverse=True )
+    i = 1
     for e in result[:10]:
-        print e['rfid'], e['name'], e['score']
+        print str(i) + ". ", e['rfid'], e['name'], e['score']
+        i += 1
 
 def init():
     global store
@@ -46,10 +48,16 @@ def main():
 
     init()
 
+
+
     rx = re.compile("UID.*: ([0-9a-f ]+)$")
 
     while True:
-        raw = subprocess.check_output(["nfc-poll"])
+        refresh()
+        try:
+            raw = subprocess.check_output(["nfc-poll"], shell=True, stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError:
+            continue
         for line in raw.splitlines():
             if "UID" in line:
                 match = rx.search(line)
@@ -58,7 +66,7 @@ def main():
                     process(rfid)
 
 
-
 if __name__ == "__main__":
     main()
+
 # vim: expandtab tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79:
