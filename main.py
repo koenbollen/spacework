@@ -1,6 +1,8 @@
 
 import sys
-from time import time, sleep    
+import re
+import subprocess
+from time import time, sleep
 import json
 
 TIMESPAN = 30 #seconds
@@ -12,23 +14,21 @@ def process( rfid ):
     now = time()
     if rfid not in store:
         store[rfid] = {'latest': -1, 'score': 0, 'checkins': [], 'rfid': rfid, 'name': "John Doe", 'multiplier': 1}
-        
     store[rfid]['checkins'].append(now)
     if now-store[rfid]['latest'] < TIMESPAN:
         return
-    
     store[rfid]['latest'] = now
     store[rfid]['score'] += store[rfid]['multiplier'];
-    
+
     refresh()
     commit()
-    
+
 def refresh():
     print chr(27) + "[2J"
     result = sorted( store.values(), key=lambda i: i['score'] )
     for e in result[:10]:
         print e['rfid'], e['name'], e['score']
-    
+
 def init():
     global store
     try:
@@ -43,15 +43,22 @@ def commit():
         json.dump(store, fp, indent=4)
 
 def main():
-    
+
     init()
-    
+
+    rx = re.compile("UID.*: ([0-9a-f ]+)$")
+
     while True:
-        raw_input("press enter for face rfid")
-        rfid = "a191c715"
-        process( rfid )
-        sleep(1) # emulate delay of rfid reader?
+        raw = subprocess.check_output(["nfc-poll"])
+        for line in raw.splitlines():
+            if "UID" in line:
+                match = rx.search(line)
+                if match:
+                    rfid = match.group(1).replace(" ", "")
+                    process(rfid)
+
 
 
 if __name__ == "__main__":
     main()
+# vim: expandtab tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79:
