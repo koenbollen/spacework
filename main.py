@@ -11,12 +11,14 @@ def process( rfid ):
     global store
     now = time()
     if rfid not in store:
-        store[rfid] = {'latest': -1, 'score': 0, 'checkins': [], 'rfid': rfid, 'name': "John Doe"}
+        store[rfid] = {'latest': -1, 'score': 0, 'checkins': [], 'rfid': rfid, 'name': "John Doe", 'multiplier': 1}
+        
     store[rfid]['checkins'].append(now)
     if now-store[rfid]['latest'] < TIMESPAN:
         return
+    
     store[rfid]['latest'] = now
-    store[rfid]['score'] += 1
+    store[rfid]['score'] += store[rfid]['multiplier'];
     
     refresh()
     commit()
