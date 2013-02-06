@@ -4,6 +4,7 @@ import re
 import subprocess
 from time import time, sleep
 import json
+import names
 
 TIMESPAN = 30 #seconds
 
@@ -13,7 +14,9 @@ def process( rfid ):
     global store
     now = time()
     if rfid not in store:
-        store[rfid] = {'latest': -1, 'score': 0, 'checkins': [], 'rfid': rfid, 'name': "John Doe", 'multiplier': 1}
+        name = names.buildname()
+        # TODO: Check whether or not the name already exists.
+        store[rfid] = {'latest': -1, 'score': 0, 'checkins': [], 'rfid': rfid, 'name': name, 'multiplier': 1}
     store[rfid]['checkins'].append(now)
     if now-store[rfid]['latest'] < TIMESPAN:
         return
