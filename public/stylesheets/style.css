@@ -1,0 +1,51 @@
+
+body {
+	margin: 0;
+	padding: 0;
+	font: 24pt "Courier New";
+	background: black;
+	min-height: 100%;
+	padding-bottom: 2.5em;
+}
+
+* {
+	color: #00ff00;
+}
+
+.record {
+	vertical-align: center;
+}
+
+.record td {
+	font-size: 24pt;
+	padding: 0 10px 0 10px;5
+}
+
+.record td img {
+	height: 1em;
+}
+
+.record td.name {
+}
+
+.record td.scor {
+	padding-left: 100px;
+	text-align: right;
+}
+
+.prompt {
+	z-index: 100;
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	padding: 5px;
+	font-size: 24pt;
+	background: black;
+}
+
+.blinking {
+	text-decoration: blinking;
+}
+
+
+

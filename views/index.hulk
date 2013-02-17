@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Spacework</title>
+		<script type="text/javascript" src="/javascripts/hogan-2.0.0.js"></script>
+		<link href="/stylesheets/style.css" rel="stylesheet">
+	</head>
+	<body>
+		<table class="highscore">
+			{{# scores}}
+			<tr class="record">
+				<td class="rank">{{ rank }}</td>
+				<td class="avat"><img src="http://gravatar.com/avatar/{{ hash }}?f=y&d=retro"></td>
+				<td class="name">{{ name }}</td>
+				<td class="scor">{{ score }}</td>
+			</tr>
+			{{/ scores }}
+		</table>
+		<div class="prompt">
+			<div class="status">waiting for RFID...</div>
+			[spacework]$ <blink class="blinking">_</blink>
+		</div>
+	</body>
+</html>
